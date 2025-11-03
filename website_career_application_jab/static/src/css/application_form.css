@@ -1,0 +1,278 @@
+/* Career Application Form Styles - Multi-Step */
+
+.career_application_form {
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+/* Form Steps */
+.form-step {
+    display: none;
+    animation: fadeIn 0.3s ease-in;
+}
+
+.form-step.active {
+    display: block;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Progress Bar */
+.progress-container {
+    margin-bottom: 30px;
+}
+
+.progress {
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+.progress-bar {
+    transition: width 0.4s ease;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+#progressText {
+    font-size: 15px;
+    font-weight: 600;
+    color: white;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    padding: 0 10px;
+}
+
+/* Cards */
+.career_application_form .card {
+    border: 1px solid #dee2e6;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    border-radius: 8px;
+}
+
+.career_application_form .card-header {
+    background-color: #875a7b !important;
+    border-radius: 8px 8px 0 0 !important;
+}
+
+.career_application_form .card-header h3 {
+    margin: 0;
+    font-size: 1.5rem;
+}
+
+/* Form Elements */
+.career_application_form .form-label {
+    font-weight: 500;
+    margin-bottom: 0.5rem;
+}
+
+.career_application_form .text-danger {
+    color: #dc3545;
+}
+
+.career_application_form .form-control,
+.career_application_form .form-select {
+    border-radius: 5px;
+    border: 1px solid #ced4da;
+}
+
+.career_application_form .form-control:focus,
+.career_application_form .form-select:focus {
+    border-color: #875a7b;
+    box-shadow: 0 0 0 0.2rem rgba(135, 90, 123, 0.25);
+}
+
+.career_application_form .form-control.is-invalid {
+    border-color: #dc3545;
+}
+
+/* File Upload Styling */
+.career_application_form input[type="file"] {
+    padding: 0.375rem 0.75rem;
+}
+
+/* Experience and Education Entries */
+.experience-entry,
+.education-entry,
+.child-entry {
+    border: 1px solid #dee2e6;
+    padding: 15px;
+    margin-bottom: 15px;
+    border-radius: 8px;
+    background-color: #f8f9fa;
+    position: relative;
+}
+
+.experience-entry:hover,
+.education-entry:hover,
+.child-entry:hover {
+    box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+}
+
+.remove-entry-btn {
+    float: right;
+}
+
+/* Navigation Buttons */
+.form-navigation {
+    position: sticky;
+    bottom: 0;
+    background: white;
+    padding: 20px 0;
+    border-top: 2px solid #dee2e6;
+    margin-top: 30px;
+}
+
+.form-navigation .btn {
+    transition: all 0.3s ease;
+}
+
+.form-navigation .btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+}
+
+/* Button Styles */
+.btn-primary {
+    background-color: #875a7b;
+    border-color: #875a7b;
+    padding: 12px 30px;
+    font-size: 16px;
+    font-weight: 500;
+}
+
+.btn-primary:hover {
+    background-color: #6d4861;
+    border-color: #6d4861;
+}
+
+.btn-success {
+    padding: 12px 30px;
+    font-size: 16px;
+    font-weight: 500;
+}
+
+.btn-secondary {
+    padding: 10px 25px;
+}
+
+/* Consent Section */
+.consent-section {
+    background-color: #fff3cd;
+    padding: 20px;
+    border-radius: 8px;
+    border: 2px solid #ffc107;
+}
+
+.form-check-input:checked {
+    background-color: #875a7b;
+    border-color: #875a7b;
+}
+
+/* Alert Styles */
+.alert-danger {
+    margin-bottom: 20px;
+    border-radius: 8px;
+}
+
+/* Radio and Checkbox Styles */
+.form-check-inline {
+    margin-right: 1.5rem;
+}
+
+.form-check-label {
+    cursor: pointer;
+    user-select: none;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .career_application_form .card-header h3 {
+        font-size: 1.2rem;
+    }
+
+    .form-navigation .btn {
+        font-size: 14px;
+        padding: 10px 20px;
+    }
+
+    .progress {
+        height: 25px !important;
+    }
+
+    #progressText {
+        font-size: 12px;
+    }
+}
+
+/* Hide/Show conditional fields (initially hidden) */
+.passport-fields,
+.disability-fields,
+.military-section,
+.military-postpone-fields,
+.family-fields,
+.spouse-fields,
+.spouse-passport-fields,
+.certificate-fields,
+.recognition-fields {
+    display: none;
+}
+
+/* Smooth transitions for conditional fields */
+.passport-fields,
+.disability-fields,
+.military-section,
+.military-postpone-fields,
+.family-fields,
+.spouse-fields,
+.spouse-passport-fields,
+.certificate-fields,
+.recognition-fields {
+    transition: all 0.3s ease;
+}
+
+/* Multiple select styling */
+select[multiple] {
+    min-height: 120px;
+}
+
+/* Small text */
+small.form-text {
+    display: block;
+    margin-top: 0.25rem;
+    font-size: 0.875rem;
+    color: #6c757d;
+}
+
+/* Section dividers */
+hr {
+    margin: 1.5rem 0;
+    border-top: 2px solid #dee2e6;
+}
+
+/* Float helpers */
+.float-end {
+    float: right;
+}
+
+/* Background variants */
+.bg-light {
+    background-color: #f8f9fa !important;
+}
+
+/* Spacing utilities */
+.mt-3 { margin-top: 1rem !important; }
+.mb-3 { margin-bottom: 1rem !important; }
+.mb-4 { margin-bottom: 1.5rem !important; }
+.my-4 { margin-top: 1.5rem !important; margin-bottom: 1.5rem !important; }

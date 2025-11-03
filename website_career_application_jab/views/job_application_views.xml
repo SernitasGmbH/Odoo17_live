@@ -1,0 +1,682 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- ========== CAREER APPLICATION VIEWS ========== -->
+
+    <!-- Tree view for Career Applications -->
+    <record id="view_career_application_tree" model="ir.ui.view">
+        <field name="name">coflow.career.application.tree</field>
+        <field name="model">coflow.career.application</field>
+        <field name="arch" type="xml">
+            <tree string="Career Applications" decoration-info="state=='submitted'"
+                  decoration-warning="state=='under_review'" decoration-success="state=='approved'"
+                  decoration-danger="state=='rejected'">
+                <field name="submission_date"/>
+                <field name="full_name"/>
+                <field name="gender"/>
+                <field name="birth_date"/>
+                <field name="email"/>
+                <field name="phone"/>
+                <field name="addr_city"/>
+                <field name="german_level"/>
+                <field name="state"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- Form view for Career Applications -->
+    <record id="view_career_application_form" model="ir.ui.view">
+        <field name="name">coflow.career.application.form</field>
+        <field name="model">coflow.career.application</field>
+        <field name="arch" type="xml">
+            <form string="Career Application">
+                <header>
+                    <field name="state" widget="statusbar"
+                           options="{'clickable': '1'}"/>
+                </header>
+                <sheet>
+                    <div class="oe_title">
+                        <h1>
+                            <field name="full_name" placeholder="Ad Soyad" required="1"/>
+                        </h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="submission_date"/>
+                            <field name="email"/>
+                        </group>
+                        <group>
+                            <field name="phone"/>
+                            <field name="german_level"/>
+                        </group>
+                    </group>
+
+                    <notebook>
+                        <!-- Personal Information Tab -->
+                        <page string="Kişisel Bilgiler" name="personal_info">
+                            <group>
+                                <group string="Temel Bilgiler">
+                                    <field name="gender" widget="radio"/>
+                                    <field name="birth_date"/>
+                                    <field name="birth_place"/>
+                                    <field name="birth_country"/>
+                                    <field name="marital_status"/>
+                                </group>
+                                <group string="İletişim">
+                                    <field name="email"/>
+                                    <field name="phone"/>
+                                </group>
+                            </group>
+                            <group string="Adres Bilgileri">
+                                <group>
+                                    <field name="addr_mahalle"/>
+                                    <field name="addr_cadde"/>
+                                    <field name="addr_sokak"/>
+                                    <field name="addr_apt_no"/>
+                                </group>
+                                <group>
+                                    <field name="addr_daire_no"/>
+                                    <field name="addr_postcode"/>
+                                    <field name="addr_district"/>
+                                    <field name="addr_city"/>
+                                    <field name="addr_country"/>
+                                </group>
+                            </group>
+                        </page>
+
+                        <!-- Passport, Disability, Military Tab -->
+                        <page string="Pasaport &amp; Engellilik &amp; Askerlik" name="passport_disability_military">
+                            <group string="Pasaport Bilgileri">
+                                <group>
+                                    <field name="passport_has" widget="radio"/>
+                                    <field name="passport_no"
+                                           invisible="passport_has != 'evet'"/>
+                                </group>
+                                <group>
+                                    <field name="passport_valid_until"
+                                           invisible="passport_has != 'evet'"/>
+                                    <field name="passport_photo_id"
+                                           invisible="passport_has != 'evet'"/>
+                                </group>
+                            </group>
+
+                            <group string="Engellilik Durumu">
+                                <group>
+                                    <field name="disability" widget="radio"/>
+                                    <field name="disability_note"
+                                           invisible="disability != 'var'"/>
+                                </group>
+                                <group>
+                                    <field name="disability_doc_id"
+                                           invisible="disability != 'var'"/>
+                                </group>
+                            </group>
+
+                            <group string="Askerlik Durumu (Erkekler İçin)"
+                                   invisible="gender != 'erkek'">
+                                <group>
+                                    <field name="military_status"
+                                           invisible="gender != 'erkek'"/>
+                                    <field name="military_postpone_until"
+                                           invisible="military_status != 'tecilli'"/>
+                                </group>
+                                <group>
+                                    <field name="military_postpone_doc_id"
+                                           invisible="military_status != 'tecilli'"/>
+                                </group>
+                            </group>
+                        </page>
+
+                        <!-- Criminal Record Tab -->
+                        <page string="Adli Sicil" name="criminal_record">
+                            <group>
+                                <group>
+                                    <field name="criminal_record" widget="radio"/>
+                                </group>
+                                <group>
+                                    <field name="criminal_record_doc_id"/>
+                                </group>
+                            </group>
+                        </page>
+
+                        <!-- Family Reunion Tab -->
+                        <page string="Aile Birleşimi" name="family_reunion">
+                            <group>
+                                <field name="family_reunion" widget="radio"/>
+                                <field name="has_spouse"
+                                       invisible="family_reunion != 'evet'"/>
+                                <field name="children_count"
+                                       invisible="family_reunion != 'evet'"/>
+                            </group>
+
+                            <group string="Eş Bilgileri"
+                                   invisible="family_reunion != 'evet' or not has_spouse">
+                                <group>
+                                    <field name="spouse_name"/>
+                                    <field name="spouse_birth_date"/>
+                                    <field name="spouse_birth_place"/>
+                                    <field name="spouse_phone"/>
+                                    <field name="spouse_email"/>
+                                </group>
+                                <group>
+                                    <field name="spouse_passport_has" widget="radio"/>
+                                    <field name="spouse_passport_no"
+                                           invisible="spouse_passport_has != 'evet'"/>
+                                    <field name="spouse_passport_valid_until"
+                                           invisible="spouse_passport_has != 'evet'"/>
+                                    <field name="spouse_passport_photo_id"
+                                           invisible="spouse_passport_has != 'evet'"/>
+                                    <field name="spouse_german_certificate" widget="radio"/>
+                                </group>
+                            </group>
+
+                            <group string="Çocuklar"
+                                   invisible="family_reunion != 'evet' or children_count == 0">
+                                <field name="child_ids" nolabel="1">
+                                    <tree editable="bottom">
+                                        <field name="name"/>
+                                        <field name="age"/>
+                                        <field name="birth_date"/>
+                                        <field name="birth_place"/>
+                                        <field name="passport_has"/>
+                                        <field name="passport_no" optional="hide"/>
+                                        <field name="passport_valid_until" optional="hide"/>
+                                    </tree>
+                                </field>
+                            </group>
+                        </page>
+
+                        <!-- Language & Certificate Tab -->
+                        <page string="Dil &amp; Sertifika" name="language_certificate">
+                            <group>
+                                <group string="Almanca Yetkinliği">
+                                    <field name="german_level"/>
+                                    <field name="has_language_certificate" widget="radio"/>
+                                </group>
+                                <group string="Sertifika Bilgileri"
+                                       invisible="has_language_certificate != 'evet'">
+                                    <field name="language_certificate_type"
+                                           invisible="has_language_certificate != 'evet'"/>
+                                    <field name="language_certificate_doc_id"
+                                           invisible="has_language_certificate != 'evet'"/>
+                                </group>
+                            </group>
+                        </page>
+
+                        <!-- Recognition (Denklik) Tab -->
+                        <page string="Denklik" name="recognition">
+                            <group>
+                                <group>
+                                    <field name="recognition_status" widget="radio"/>
+                                </group>
+                                <group invisible="recognition_status == 'hayir'">
+                                    <field name="recognition_state"
+                                           invisible="recognition_status == 'hayir'"/>
+                                    <field name="recognition_applied_at"
+                                           invisible="recognition_status == 'hayir'"/>
+                                    <field name="recognition_received_at"
+                                           invisible="recognition_status == 'hayir'"/>
+                                </group>
+                            </group>
+                        </page>
+
+                        <!-- Job Preferences Tab -->
+                        <page string="Tercihler" name="preferences">
+                            <group>
+                                <group>
+                                    <field name="choice1" options="{'no_create': True}"/>
+                                    <field name="choice2" options="{'no_create': True}"/>
+                                    <field name="choice3" options="{'no_create': True}"/>
+                                </group>
+                                <group>
+                                    <field name="accept_other_department"/>
+                                </group>
+                            </group>
+                        </page>
+
+                        <!-- Work Experience Tab -->
+                        <page string="Deneyimler" name="experience">
+                            <field name="experience_ids">
+                                <tree>
+                                    <field name="company"/>
+                                    <field name="position"/>
+                                    <field name="city"/>
+                                    <field name="date_start"/>
+                                    <field name="date_end"/>
+                                    <field name="is_current"/>
+                                </tree>
+                                <form>
+                                    <sheet>
+                                        <group>
+                                            <group>
+                                                <field name="company"/>
+                                                <field name="position"/>
+                                                <field name="city"/>
+                                            </group>
+                                            <group>
+                                                <field name="date_start"/>
+                                                <field name="date_end"/>
+                                                <field name="is_current"/>
+                                            </group>
+                                        </group>
+                                        <group>
+                                            <field name="department_ids" widget="many2many_tags"/>
+                                            <field name="departments_other"
+                                                   invisible="not department_ids"/>
+                                        </group>
+                                        <group>
+                                            <field name="device_ids" widget="many2many_tags"/>
+                                            <field name="devices_other"
+                                                   invisible="not device_ids"/>
+                                        </group>
+                                        <group>
+                                            <field name="duties"/>
+                                        </group>
+                                    </sheet>
+                                </form>
+                            </field>
+                        </page>
+
+                        <!-- Education Tab -->
+                        <page string="Eğitimler" name="education">
+                            <field name="education_ids">
+                                <tree>
+                                    <field name="school"/>
+                                    <field name="city"/>
+                                    <field name="date_start"/>
+                                    <field name="date_end"/>
+                                    <field name="is_current"/>
+                                </tree>
+                                <form>
+                                    <sheet>
+                                        <group>
+                                            <group>
+                                                <field name="school"/>
+                                                <field name="city"/>
+                                            </group>
+                                            <group>
+                                                <field name="date_start"/>
+                                                <field name="date_end"/>
+                                                <field name="is_current"/>
+                                            </group>
+                                        </group>
+                                    </sheet>
+                                </form>
+                            </field>
+                        </page>
+
+                        <!-- Motivation & Extra Info Tab -->
+                        <page string="Motivasyon &amp; Ek Bilgiler" name="motivation">
+                            <group>
+                                <field name="motivation_text" nolabel="1"
+                                       placeholder="Neden bu pozisyonda çalışmak istiyorsunuz?"/>
+                            </group>
+                            <group>
+                                <field name="extra_info" nolabel="1"
+                                       placeholder="Eklemek istediğiniz başka bilgiler..."/>
+                            </group>
+                        </page>
+
+                        <!-- Documents Tab -->
+                        <page string="Belgeler" name="documents">
+                            <group>
+                                <field name="formul_a_b_doc_id"/>
+                            </group>
+                        </page>
+
+                        <!-- Consent Tab -->
+                        <page string="Onay" name="consent">
+                            <group>
+                                <group>
+                                    <field name="consent_ok"/>
+                                    <field name="consent_name"/>
+                                    <field name="consent_date"/>
+                                </group>
+                            </group>
+                        </page>
+                    </notebook>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids"/>
+                    <field name="activity_ids"/>
+                    <field name="message_ids"/>
+                </div>
+            </form>
+        </field>
+    </record>
+
+    <!-- Search view for Career Applications -->
+    <record id="view_career_application_search" model="ir.ui.view">
+        <field name="name">coflow.career.application.search</field>
+        <field name="model">coflow.career.application</field>
+        <field name="arch" type="xml">
+            <search string="Search Career Applications">
+                <field name="full_name"/>
+                <field name="email"/>
+                <field name="phone"/>
+                <field name="addr_city"/>
+                <filter string="Kadın" name="filter_female" domain="[('gender', '=', 'kadin')]"/>
+                <filter string="Erkek" name="filter_male" domain="[('gender', '=', 'erkek')]"/>
+                <separator/>
+                <filter string="Gönderildi" name="filter_submitted" domain="[('state', '=', 'submitted')]"/>
+                <filter string="İnceleniyor" name="filter_under_review" domain="[('state', '=', 'under_review')]"/>
+                <filter string="Onaylandı" name="filter_approved" domain="[('state', '=', 'approved')]"/>
+                <filter string="Reddedildi" name="filter_rejected" domain="[('state', '=', 'rejected')]"/>
+                <group expand="0" string="Group By">
+                    <filter string="Cinsiyet" name="group_gender" context="{'group_by': 'gender'}"/>
+                    <filter string="Şehir" name="group_city" context="{'group_by': 'addr_city'}"/>
+                    <filter string="Almanca Seviyesi" name="group_german_level" context="{'group_by': 'german_level'}"/>
+                    <filter string="Durum" name="group_state" context="{'group_by': 'state'}"/>
+                    <filter string="Başvuru Ayı" name="group_month" context="{'group_by': 'submission_date:month'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <!-- ========== EXPERIENCE VIEWS ========== -->
+
+    <record id="view_career_application_experience_tree" model="ir.ui.view">
+        <field name="name">coflow.career.application.experience.tree</field>
+        <field name="model">coflow.career.application.experience</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="application_id"/>
+                <field name="company"/>
+                <field name="position"/>
+                <field name="city"/>
+                <field name="date_start"/>
+                <field name="date_end"/>
+                <field name="is_current"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="view_career_application_experience_form" model="ir.ui.view">
+        <field name="name">coflow.career.application.experience.form</field>
+        <field name="model">coflow.career.application.experience</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <group>
+                        <field name="application_id"/>
+                    </group>
+                    <group>
+                        <group>
+                            <field name="company"/>
+                            <field name="position"/>
+                            <field name="city"/>
+                        </group>
+                        <group>
+                            <field name="date_start"/>
+                            <field name="date_end"/>
+                            <field name="is_current"/>
+                        </group>
+                    </group>
+                    <group>
+                        <field name="department_ids" widget="many2many_tags"/>
+                        <field name="departments_other"/>
+                    </group>
+                    <group>
+                        <field name="device_ids" widget="many2many_tags"/>
+                        <field name="devices_other"/>
+                    </group>
+                    <group>
+                        <field name="duties"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- ========== EDUCATION VIEWS ========== -->
+
+    <record id="view_career_application_education_tree" model="ir.ui.view">
+        <field name="name">coflow.career.application.education.tree</field>
+        <field name="model">coflow.career.application.education</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="application_id"/>
+                <field name="school"/>
+                <field name="city"/>
+                <field name="date_start"/>
+                <field name="date_end"/>
+                <field name="is_current"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="view_career_application_education_form" model="ir.ui.view">
+        <field name="name">coflow.career.application.education.form</field>
+        <field name="model">coflow.career.application.education</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <group>
+                        <field name="application_id"/>
+                    </group>
+                    <group>
+                        <group>
+                            <field name="school"/>
+                            <field name="city"/>
+                        </group>
+                        <group>
+                            <field name="date_start"/>
+                            <field name="date_end"/>
+                            <field name="is_current"/>
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- ========== CHILD VIEWS ========== -->
+
+    <record id="view_career_application_child_tree" model="ir.ui.view">
+        <field name="name">coflow.career.application.child.tree</field>
+        <field name="model">coflow.career.application.child</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="application_id"/>
+                <field name="name"/>
+                <field name="age"/>
+                <field name="birth_date"/>
+                <field name="birth_place"/>
+                <field name="passport_has"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="view_career_application_child_form" model="ir.ui.view">
+        <field name="name">coflow.career.application.child.form</field>
+        <field name="model">coflow.career.application.child</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <group>
+                        <field name="application_id"/>
+                    </group>
+                    <group>
+                        <group>
+                            <field name="name"/>
+                            <field name="age"/>
+                            <field name="birth_date"/>
+                            <field name="birth_place"/>
+                        </group>
+                        <group>
+                            <field name="passport_has" widget="radio"/>
+                            <field name="passport_no" invisible="passport_has != 'evet'"/>
+                            <field name="passport_valid_until" invisible="passport_has != 'evet'"/>
+                            <field name="passport_photo_id" invisible="passport_has != 'evet'"/>
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- ========== MASTER DATA VIEWS ========== -->
+
+    <!-- Hospital Department Views -->
+    <record id="view_hospital_department_tree" model="ir.ui.view">
+        <field name="name">coflow.hospital.department.tree</field>
+        <field name="model">coflow.hospital.department</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="sequence" widget="handle"/>
+                <field name="name"/>
+                <field name="is_other"/>
+                <field name="active"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="view_hospital_department_form" model="ir.ui.view">
+        <field name="name">coflow.hospital.department.form</field>
+        <field name="model">coflow.hospital.department</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <group>
+                        <field name="name"/>
+                        <field name="sequence"/>
+                        <field name="is_other"/>
+                        <field name="active"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- Medical Device Views -->
+    <record id="view_medical_device_tree" model="ir.ui.view">
+        <field name="name">coflow.medical.device.tree</field>
+        <field name="model">coflow.medical.device</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="sequence" widget="handle"/>
+                <field name="name"/>
+                <field name="is_other"/>
+                <field name="active"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="view_medical_device_form" model="ir.ui.view">
+        <field name="name">coflow.medical.device.form</field>
+        <field name="model">coflow.medical.device</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <group>
+                        <field name="name"/>
+                        <field name="sequence"/>
+                        <field name="is_other"/>
+                        <field name="active"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- ========== ACTIONS ========== -->
+
+    <record id="action_career_application" model="ir.actions.act_window">
+        <field name="name">Başvurular</field>
+        <field name="res_model">coflow.career.application</field>
+        <field name="view_mode">tree,form</field>
+        <field name="context">{'search_default_filter_submitted': 1}</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Henüz başvuru yok
+            </p>
+            <p>
+                Kariyer başvuruları buradan yönetilebilir.
+            </p>
+        </field>
+    </record>
+
+    <record id="action_career_application_experience" model="ir.actions.act_window">
+        <field name="name">Deneyimler</field>
+        <field name="res_model">coflow.career.application.experience</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+    <record id="action_career_application_education" model="ir.actions.act_window">
+        <field name="name">Eğitimler</field>
+        <field name="res_model">coflow.career.application.education</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+    <record id="action_career_application_child" model="ir.actions.act_window">
+        <field name="name">Çocuklar</field>
+        <field name="res_model">coflow.career.application.child</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+    <record id="action_hospital_department" model="ir.actions.act_window">
+        <field name="name">Hastane Bölümleri</field>
+        <field name="res_model">coflow.hospital.department</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+    <record id="action_medical_device" model="ir.actions.act_window">
+        <field name="name">Tıbbi Cihazlar</field>
+        <field name="res_model">coflow.medical.device</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+    <!-- ========== MENU ITEMS ========== -->
+
+    <menuitem id="menu_career_application_root"
+              name="Kariyer Başvuruları"
+              sequence="100"
+              web_icon="website_career_application_jab,static/description/icon.png"/>
+
+    <menuitem id="menu_career_application_applications"
+              name="Başvurular"
+              parent="menu_career_application_root"
+              sequence="10"/>
+
+    <menuitem id="menu_career_application_list"
+              name="Tüm Başvurular"
+              parent="menu_career_application_applications"
+              action="action_career_application"
+              sequence="10"/>
+
+    <menuitem id="menu_career_application_experience"
+              name="Deneyimler"
+              parent="menu_career_application_applications"
+              action="action_career_application_experience"
+              sequence="20"/>
+
+    <menuitem id="menu_career_application_education"
+              name="Eğitimler"
+              parent="menu_career_application_applications"
+              action="action_career_application_education"
+              sequence="30"/>
+
+    <menuitem id="menu_career_application_children"
+              name="Çocuklar"
+              parent="menu_career_application_applications"
+              action="action_career_application_child"
+              sequence="40"/>
+
+    <menuitem id="menu_career_application_config"
+              name="Yapılandırma"
+              parent="menu_career_application_root"
+              sequence="90"/>
+
+    <menuitem id="menu_hospital_department"
+              name="Hastane Bölümleri"
+              parent="menu_career_application_config"
+              action="action_hospital_department"
+              sequence="10"/>
+
+    <menuitem id="menu_medical_device"
+              name="Tıbbi Cihazlar"
+              parent="menu_career_application_config"
+              action="action_medical_device"
+              sequence="20"/>
+
+</odoo>

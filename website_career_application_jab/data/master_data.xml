@@ -1,0 +1,194 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+
+        <!-- Hospital Departments Master Data -->
+        <record id="dept_acil_servis" model="coflow.hospital.department">
+            <field name="name">Acil Servis (Notaufnahme)</field>
+            <field name="sequence">10</field>
+            <field name="is_other" eval="False"/>
+        </record>
+
+        <record id="dept_yogun_bakim" model="coflow.hospital.department">
+            <field name="name">Yoğun Bakım (Intensivstation)</field>
+            <field name="sequence">20</field>
+            <field name="is_other" eval="False"/>
+        </record>
+
+        <record id="dept_ameliyathane" model="coflow.hospital.department">
+            <field name="name">Ameliyathane (OP)</field>
+            <field name="sequence">30</field>
+            <field name="is_other" eval="False"/>
+        </record>
+
+        <record id="dept_anestezi" model="coflow.hospital.department">
+            <field name="name">Anestezi (Anästhesie)</field>
+            <field name="sequence">40</field>
+            <field name="is_other" eval="False"/>
+        </record>
+
+        <record id="dept_dahiliye" model="coflow.hospital.department">
+            <field name="name">Dahiliye (Innere Medizin)</field>
+            <field name="sequence">50</field>
+            <field name="is_other" eval="False"/>
+        </record>
+
+        <record id="dept_cerrahi" model="coflow.hospital.department">
+            <field name="name">Cerrahi (Chirurgie)</field>
+            <field name="sequence">60</field>
+            <field name="is_other" eval="False"/>
+        </record>
+
+        <record id="dept_kardiyoloji" model="coflow.hospital.department">
+            <field name="name">Kardiyoloji (Kardiologie)</field>
+            <field name="sequence">70</field>
+            <field name="is_other" eval="False"/>
+        </record>
+
+        <record id="dept_noroloji" model="coflow.hospital.department">
+            <field name="name">Nöroloji (Neurologie)</field>
+            <field name="sequence">80</field>
+            <field name="is_other" eval="False"/>
+        </record>
+
+        <record id="dept_ortopedi" model="coflow.hospital.department">
+            <field name="name">Ortopedi (Orthopädie)</field>
+            <field name="sequence">90</field>
+            <field name="is_other" eval="False"/>
+        </record>
+
+        <record id="dept_pediatri" model="coflow.hospital.department">
+            <field name="name">Pediatri / Çocuk Hastalıkları (Pädiatrie)</field>
+            <field name="sequence">100</field>
+            <field name="is_other" eval="False"/>
+        </record>
+
+        <record id="dept_kadin_dogum" model="coflow.hospital.department">
+            <field name="name">Kadın Doğum (Gynäkologie)</field>
+            <field name="sequence">110</field>
+            <field name="is_other" eval="False"/>
+        </record>
+
+        <record id="dept_psikiyatri" model="coflow.hospital.department">
+            <field name="name">Psikiyatri (Psychiatrie)</field>
+            <field name="sequence">120</field>
+            <field name="is_other" eval="False"/>
+        </record>
+
+        <record id="dept_radyoloji" model="coflow.hospital.department">
+            <field name="name">Radyoloji (Radiologie)</field>
+            <field name="sequence">130</field>
+            <field name="is_other" eval="False"/>
+        </record>
+
+        <record id="dept_onkoloji" model="coflow.hospital.department">
+            <field name="name">Onkoloji (Onkologie)</field>
+            <field name="sequence">140</field>
+            <field name="is_other" eval="False"/>
+        </record>
+
+        <record id="dept_geriatri" model="coflow.hospital.department">
+            <field name="name">Geriatri / Yaşlı Bakımı (Geriatrie)</field>
+            <field name="sequence">150</field>
+            <field name="is_other" eval="False"/>
+        </record>
+
+        <record id="dept_diger" model="coflow.hospital.department">
+            <field name="name">Diğer</field>
+            <field name="sequence">999</field>
+            <field name="is_other" eval="True"/>
+        </record>
+
+        <!-- Medical Devices Master Data -->
+        <record id="device_ekg" model="coflow.medical.device">
+            <field name="name">EKG</field>
+            <field name="sequence">10</field>
+            <field name="is_other" eval="False"/>
+        </record>
+
+        <record id="device_defibrilator" model="coflow.medical.device">
+            <field name="name">Defibrilatör</field>
+            <field name="sequence">20</field>
+            <field name="is_other" eval="False"/>
+        </record>
+
+        <record id="device_monitor" model="coflow.medical.device">
+            <field name="name">Monitör</field>
+            <field name="sequence">30</field>
+            <field name="is_other" eval="False"/>
+        </record>
+
+        <record id="device_enjektor" model="coflow.medical.device">
+            <field name="name">Enjektör Pompası</field>
+            <field name="sequence">40</field>
+            <field name="is_other" eval="False"/>
+        </record>
+
+        <record id="device_ventilator" model="coflow.medical.device">
+            <field name="name">Ventilatör / Solunum Cihazı</field>
+            <field name="sequence">50</field>
+            <field name="is_other" eval="False"/>
+        </record>
+
+        <record id="device_ultrason" model="coflow.medical.device">
+            <field name="name">Ultrason Cihazı</field>
+            <field name="sequence">60</field>
+            <field name="is_other" eval="False"/>
+        </record>
+
+        <record id="device_bt" model="coflow.medical.device">
+            <field name="name">BT / Tomografi</field>
+            <field name="sequence">70</field>
+            <field name="is_other" eval="False"/>
+        </record>
+
+        <record id="device_mr" model="coflow.medical.device">
+            <field name="name">MR / MRI</field>
+            <field name="sequence">80</field>
+            <field name="is_other" eval="False"/>
+        </record>
+
+        <record id="device_rontgen" model="coflow.medical.device">
+            <field name="name">Röntgen</field>
+            <field name="sequence">90</field>
+            <field name="is_other" eval="False"/>
+        </record>
+
+        <record id="device_kan_gazi" model="coflow.medical.device">
+            <field name="name">Kan Gazı Cihazı</field>
+            <field name="sequence">100</field>
+            <field name="is_other" eval="False"/>
+        </record>
+
+        <record id="device_pulse_oksimetre" model="coflow.medical.device">
+            <field name="name">Pulse Oksimetre</field>
+            <field name="sequence">110</field>
+            <field name="is_other" eval="False"/>
+        </record>
+
+        <record id="device_tansiyon" model="coflow.medical.device">
+            <field name="name">Tansiyon Aleti</field>
+            <field name="sequence">120</field>
+            <field name="is_other" eval="False"/>
+        </record>
+
+        <record id="device_ates" model="coflow.medical.device">
+            <field name="name">Ateş Ölçer</field>
+            <field name="sequence">130</field>
+            <field name="is_other" eval="False"/>
+        </record>
+
+        <record id="device_aspirator" model="coflow.medical.device">
+            <field name="name">Aspiratör</field>
+            <field name="sequence">140</field>
+            <field name="is_other" eval="False"/>
+        </record>
+
+        <record id="device_diger" model="coflow.medical.device">
+            <field name="name">Diğer</field>
+            <field name="sequence">999</field>
+            <field name="is_other" eval="True"/>
+        </record>
+
+    </data>
+</odoo>

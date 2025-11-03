@@ -1,0 +1,792 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- Main Career Application Form Template - Multi-Step -->
+    <template id="career_application_form_template" name="Career Application Form">
+        <t t-call="website.layout">
+            <div id="wrap" class="oe_structure oe_empty">
+                <section class="s_cover parallax s_parallax_is_fixed bg-black-50 pb48 pt48" data-vcss="001" data-snippet="s_cover" data-name="Cover">
+                    <span class="s_parallax_bg oe_img_bg" style="background-image: url('/web/image/website.s_cover_default_image'); background-position: 50% 0;"></span>
+                    <div class="o_we_bg_filter bg-black-50"></div>
+                    <div class="container">
+                        <h1 class="text-white">Kariyer Başvuru Formu</h1>
+                        <p class="lead text-white">Lütfen aşağıdaki formu eksiksiz doldurunuz</p>
+                    </div>
+                </section>
+
+                <section class="pt32 pb48">
+                    <div class="container">
+                        <!-- Progress Bar -->
+                        <div class="row mb-4">
+                            <div class="col-12">
+                                <div class="progress-container">
+                                    <div class="progress" style="height: 30px;">
+                                        <div class="progress-bar bg-success" role="progressbar" id="formProgressBar" style="width: 10%;" aria-valuenow="10" aria-valuemin="0" aria-valuemax="100">
+                                            <span id="progressText">Adım 1 / 10</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <t t-if="errors and errors.get('general')">
+                            <div class="alert alert-danger" role="alert">
+                                <strong>Hata:</strong> <t t-esc="errors.get('general')"/>
+                            </div>
+                        </t>
+
+                        <form action="/kariyer/basvuru" method="post" enctype="multipart/form-data" class="career_application_form" id="careerApplicationForm">
+                            <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
+
+                            <!-- STEP 1: Personal Information -->
+                            <div class="form-step active" data-step="1">
+                                <div class="card mb-4">
+                                    <div class="card-header bg-primary text-white">
+                                        <h3 class="mb-0">1. Kişisel Bilgiler</h3>
+                                    </div>
+                                    <div class="card-body">
+                                        <div class="row">
+                                            <div class="col-md-12 mb-3">
+                                                <label for="full_name" class="form-label">İsim Soyisim <span class="text-danger">*</span></label>
+                                                <input type="text" class="form-control" id="full_name" name="full_name" required="required" t-att-value="form_data.get('full_name', '')"/>
+                                            </div>
+
+                                            <div class="col-md-12 mb-3">
+                                                <label class="form-label">Cinsiyet <span class="text-danger">*</span></label>
+                                                <div>
+                                                    <div class="form-check form-check-inline">
+                                                        <input class="form-check-input" type="radio" name="gender" id="gender_kadin" value="kadin" required="required" t-att-checked="'checked' if form_data.get('gender') == 'kadin' else None"/>
+                                                        <label class="form-check-label" for="gender_kadin">Kadın</label>
+                                                    </div>
+                                                    <div class="form-check form-check-inline">
+                                                        <input class="form-check-input" type="radio" name="gender" id="gender_erkek" value="erkek" required="required" t-att-checked="'checked' if form_data.get('gender') == 'erkek' else None"/>
+                                                        <label class="form-check-label" for="gender_erkek">Erkek</label>
+                                                    </div>
+                                                    <div class="form-check form-check-inline">
+                                                        <input class="form-check-input" type="radio" name="gender" id="gender_diger" value="diger" t-att-checked="'checked' if form_data.get('gender') == 'diger' else None"/>
+                                                        <label class="form-check-label" for="gender_diger">Diğer</label>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div class="col-md-6 mb-3">
+                                                <label for="birth_date" class="form-label">Doğum Tarihi <span class="text-danger">*</span></label>
+                                                <input type="date" class="form-control" id="birth_date" name="birth_date" required="required" t-att-value="form_data.get('birth_date', '')"/>
+                                            </div>
+
+                                            <div class="col-md-6 mb-3">
+                                                <label for="birth_place" class="form-label">Doğum Yeri <span class="text-danger">*</span></label>
+                                                <input type="text" class="form-control" id="birth_place" name="birth_place" required="required" t-att-value="form_data.get('birth_place', '')"/>
+                                            </div>
+
+                                            <div class="col-md-6 mb-3">
+                                                <label for="birth_country" class="form-label">Doğum Ülkesi <span class="text-danger">*</span></label>
+                                                <input type="text" class="form-control" id="birth_country" name="birth_country" required="required" t-att-value="form_data.get('birth_country', '')"/>
+                                            </div>
+
+                                            <div class="col-md-6 mb-3">
+                                                <label for="marital_status" class="form-label">Medeni Hal <span class="text-danger">*</span></label>
+                                                <select class="form-select" id="marital_status" name="marital_status" required="required">
+                                                    <option value="">Seçiniz...</option>
+                                                    <option value="bekar" t-att-selected="'selected' if form_data.get('marital_status') == 'bekar' else None">Bekar</option>
+                                                    <option value="evli" t-att-selected="'selected' if form_data.get('marital_status') == 'evli' else None">Evli</option>
+                                                    <option value="bosanmis" t-att-selected="'selected' if form_data.get('marital_status') == 'bosanmis' else None">Boşanmış</option>
+                                                    <option value="dul" t-att-selected="'selected' if form_data.get('marital_status') == 'dul' else None">Dul</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- STEP 2: Address Information -->
+                            <div class="form-step" data-step="2">
+                                <div class="card mb-4">
+                                    <div class="card-header bg-primary text-white">
+                                        <h3 class="mb-0">2. Adres ve İletişim Bilgileri</h3>
+                                    </div>
+                                    <div class="card-body">
+                                        <div class="row">
+                                            <div class="col-md-6 mb-3">
+                                                <label for="addr_mahalle" class="form-label">Mahalle <span class="text-danger">*</span></label>
+                                                <input type="text" class="form-control" name="addr_mahalle" t-att-value="form_data.get('addr_mahalle', '')"/>
+                                            </div>
+
+                                            <div class="col-md-6 mb-3">
+                                                <label for="addr_cadde" class="form-label">Cadde <span class="text-danger">*</span></label>
+                                                <input type="text" class="form-control" name="addr_cadde" t-att-value="form_data.get('addr_cadde', '')"/>
+                                            </div>
+
+                                            <div class="col-md-6 mb-3">
+                                                <label for="addr_sokak" class="form-label">Sokak <span class="text-danger">*</span></label>
+                                                <input type="text" class="form-control" name="addr_sokak" t-att-value="form_data.get('addr_sokak', '')"/>
+                                            </div>
+
+                                            <div class="col-md-3 mb-3">
+                                                <label for="addr_apt_no" class="form-label">Apartman No <span class="text-danger">*</span></label>
+                                                <input type="text" class="form-control" name="addr_apt_no" t-att-value="form_data.get('addr_apt_no', '')"/>
+                                            </div>
+
+                                            <div class="col-md-3 mb-3">
+                                                <label for="addr_daire_no" class="form-label">Daire No <span class="text-danger">*</span></label>
+                                                <input type="text" class="form-control" name="addr_daire_no" t-att-value="form_data.get('addr_daire_no', '')"/>
+                                            </div>
+
+                                            <div class="col-md-4 mb-3">
+                                                <label for="addr_postcode" class="form-label">Posta Kodu <span class="text-danger">*</span></label>
+                                                <input type="text" class="form-control" name="addr_postcode" t-att-value="form_data.get('addr_postcode', '')"/>
+                                            </div>
+
+                                            <div class="col-md-4 mb-3">
+                                                <label for="addr_district" class="form-label">İlçe <span class="text-danger">*</span></label>
+                                                <input type="text" class="form-control" name="addr_district" t-att-value="form_data.get('addr_district', '')"/>
+                                            </div>
+
+                                            <div class="col-md-4 mb-3">
+                                                <label for="addr_city" class="form-label">İl <span class="text-danger">*</span></label>
+                                                <input type="text" class="form-control" name="addr_city" t-att-value="form_data.get('addr_city', '')"/>
+                                            </div>
+
+                                            <div class="col-md-6 mb-3">
+                                                <label for="addr_country" class="form-label">Ülke <span class="text-danger">*</span></label>
+                                                <select class="form-select" name="addr_country">
+                                                    <option value="">Seçiniz...</option>
+                                                    <option value="tr" t-att-selected="'selected' if form_data.get('addr_country') == 'tr' else None">Türkiye</option>
+                                                    <option value="de" t-att-selected="'selected' if form_data.get('addr_country') == 'de' else None">Almanya</option>
+                                                    <option value="sy" t-att-selected="'selected' if form_data.get('addr_country') == 'sy' else None">Suriye</option>
+                                                    <option value="other" t-att-selected="'selected' if form_data.get('addr_country') == 'other' else None">Diğer</option>
+                                                </select>
+                                            </div>
+
+                                            <div class="col-md-6 mb-3">
+                                                <label for="phone" class="form-label">Telefon <span class="text-danger">*</span></label>
+                                                <input type="tel" class="form-control" name="phone" t-att-value="form_data.get('phone', '')"/>
+                                            </div>
+
+                                            <div class="col-md-6 mb-3">
+                                                <label for="email" class="form-label">E-posta <span class="text-danger">*</span></label>
+                                                <input type="email" class="form-control" name="email" t-att-value="form_data.get('email', '')"/>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- STEP 3: Passport Information -->
+                            <div class="form-step" data-step="3">
+                                <div class="card mb-4">
+                                    <div class="card-header bg-primary text-white">
+                                        <h3 class="mb-0">3. Pasaport Bilgileri</h3>
+                                    </div>
+                                    <div class="card-body">
+                                        <div class="row">
+                                            <div class="col-md-12 mb-3">
+                                                <label class="form-label">Pasaportunuz var mı? <span class="text-danger">*</span></label>
+                                                <div>
+                                                    <div class="form-check form-check-inline">
+                                                        <input class="form-check-input" type="radio" name="passport_has" id="passport_evet" value="evet" t-att-checked="'checked' if form_data.get('passport_has') == 'evet' else None"/>
+                                                        <label class="form-check-label" for="passport_evet">Evet</label>
+                                                    </div>
+                                                    <div class="form-check form-check-inline">
+                                                        <input class="form-check-input" type="radio" name="passport_has" id="passport_hayir" value="hayir" t-att-checked="'checked' if form_data.get('passport_has') == 'hayir' else None"/>
+                                                        <label class="form-check-label" for="passport_hayir">Hayır</label>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div class="col-md-12 passport-fields" style="display:none;">
+                                                <div class="row">
+                                                    <div class="col-md-6 mb-3">
+                                                        <label for="passport_no" class="form-label">Pasaport No <span class="text-danger">*</span></label>
+                                                        <input type="text" class="form-control" name="passport_no" t-att-value="form_data.get('passport_no', '')"/>
+                                                    </div>
+
+                                                    <div class="col-md-6 mb-3">
+                                                        <label for="passport_valid_until" class="form-label">Geçerlilik Tarihi <span class="text-danger">*</span></label>
+                                                        <input type="date" class="form-control" name="passport_valid_until" t-att-value="form_data.get('passport_valid_until', '')"/>
+                                                    </div>
+
+                                                    <div class="col-md-12 mb-3">
+                                                        <label for="passport_photo" class="form-label">Pasaport Fotoğrafı <span class="text-danger">*</span> <small>(PDF, JPG, PNG - Maks 10MB)</small></label>
+                                                        <input type="file" class="form-control" name="passport_photo" accept=".pdf,.jpg,.jpeg,.png"/>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- STEP 4: Disability & Military Status -->
+                            <div class="form-step" data-step="4">
+                                <div class="card mb-4">
+                                    <div class="card-header bg-primary text-white">
+                                        <h3 class="mb-0">4. Engellilik ve Askerlik Durumu</h3>
+                                    </div>
+                                    <div class="card-body">
+                                        <!-- Disability Section -->
+                                        <h5 class="mb-3">Engellilik Durumu</h5>
+                                        <div class="row">
+                                            <div class="col-md-12 mb-3">
+                                                <label class="form-label">Engellilik durumunuz var mı? <span class="text-danger">*</span></label>
+                                                <div>
+                                                    <div class="form-check form-check-inline">
+                                                        <input class="form-check-input" type="radio" name="disability" id="disability_yok" value="yok" t-att-checked="'checked' if form_data.get('disability') == 'yok' else None"/>
+                                                        <label class="form-check-label" for="disability_yok">Yok</label>
+                                                    </div>
+                                                    <div class="form-check form-check-inline">
+                                                        <input class="form-check-input" type="radio" name="disability" id="disability_var" value="var" t-att-checked="'checked' if form_data.get('disability') == 'var' else None"/>
+                                                        <label class="form-check-label" for="disability_var">Var</label>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div class="col-md-12 disability-fields" style="display:none;">
+                                                <div class="row">
+                                                    <div class="col-md-12 mb-3">
+                                                        <label for="disability_note" class="form-label">Engellilik Açıklaması <span class="text-danger">*</span></label>
+                                                        <textarea class="form-control" name="disability_note" rows="3" t-raw="form_data.get('disability_note', '')"></textarea>
+                                                    </div>
+
+                                                    <div class="col-md-12 mb-3">
+                                                        <label for="disability_doc" class="form-label">Engellilik Belgesi <span class="text-danger">*</span></label>
+                                                        <input type="file" class="form-control" name="disability_doc" accept=".pdf,.jpg,.jpeg,.png"/>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <hr class="my-4"/>
+
+                                        <!-- Military Section (for males) -->
+                                        <div class="military-section" style="display:none;">
+                                            <h5 class="mb-3">Askerlik Durumu <small class="text-muted">(Erkek adaylar için)</small></h5>
+                                            <div class="row">
+                                                <div class="col-md-12 mb-3">
+                                                    <label for="military_status" class="form-label">Askerlik Durumunuz <span class="text-danger">*</span></label>
+                                                <select class="form-select" name="military_status">
+                                                    <option value="">Seçiniz...</option>
+                                                    <option value="yapildi" t-att-selected="'selected' if form_data.get('military_status') == 'yapildi' else None">Yapıldı</option>
+                                                    <option value="muaf" t-att-selected="'selected' if form_data.get('military_status') == 'muaf' else None">Muaf</option>
+                                                    <option value="tecilli" t-att-selected="'selected' if form_data.get('military_status') == 'tecilli' else None">Tecilli</option>
+                                                </select>
+                                            </div>
+
+                                                <div class="col-md-12 military-postpone-fields" style="display:none;">
+                                                    <div class="row">
+                                                        <div class="col-md-6 mb-3">
+                                                            <label for="military_postpone_until" class="form-label">Tecil Bitiş Tarihi <span class="text-danger">*</span></label>
+                                                            <input type="date" class="form-control" name="military_postpone_until" t-att-value="form_data.get('military_postpone_until', '')"/>
+                                                        </div>
+
+                                                        <div class="col-md-6 mb-3">
+                                                            <label for="military_postpone_doc" class="form-label">Tecil Belgesi <span class="text-danger">*</span></label>
+                                                            <input type="file" class="form-control" name="military_postpone_doc" accept=".pdf,.jpg,.jpeg,.png"/>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- STEP 5: Criminal Record -->
+                            <div class="form-step" data-step="5">
+                                <div class="card mb-4">
+                                    <div class="card-header bg-primary text-white">
+                                        <h3 class="mb-0">5. Adli Sicil Kaydı</h3>
+                                    </div>
+                                    <div class="card-body">
+                                        <div class="row">
+                                            <div class="col-md-12 mb-3">
+                                                <label class="form-label">Adli sicil kaydınız var mı? <span class="text-danger">*</span></label>
+                                                <div>
+                                                    <div class="form-check form-check-inline">
+                                                        <input class="form-check-input" type="radio" name="criminal_record" id="criminal_yok" value="yok" t-att-checked="'checked' if form_data.get('criminal_record') == 'yok' else None"/>
+                                                        <label class="form-check-label" for="criminal_yok">Yok</label>
+                                                    </div>
+                                                    <div class="form-check form-check-inline">
+                                                        <input class="form-check-input" type="radio" name="criminal_record" id="criminal_var" value="var" t-att-checked="'checked' if form_data.get('criminal_record') == 'var' else None"/>
+                                                        <label class="form-check-label" for="criminal_var">Var</label>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div class="col-md-12 mb-3">
+                                                <label for="criminal_record_doc" class="form-label">Adli Sicil Belgesi <span class="text-danger">*</span></label>
+                                                <input type="file" class="form-control" name="criminal_record_doc" accept=".pdf,.jpg,.jpeg,.png"/>
+                                                <small class="form-text text-muted">Adli sicil belgenizi yüklemeniz gerekmektedir.</small>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- STEP 6: Family Reunion -->
+                            <div class="form-step" data-step="6">
+                                <div class="card mb-4">
+                                    <div class="card-header bg-primary text-white">
+                                        <h3 class="mb-0">6. Aile Birleşimi</h3>
+                                    </div>
+                                    <div class="card-body">
+                                        <div class="row">
+                                            <div class="col-md-12 mb-3">
+                                                <label class="form-label">Aile birleşimi yapmayı düşünüyor musunuz? <span class="text-danger">*</span></label>
+                                                <div>
+                                                    <div class="form-check form-check-inline">
+                                                        <input class="form-check-input" type="radio" name="family_reunion" id="family_evet" value="evet" t-att-checked="'checked' if form_data.get('family_reunion') == 'evet' else None"/>
+                                                        <label class="form-check-label" for="family_evet">Evet</label>
+                                                    </div>
+                                                    <div class="form-check form-check-inline">
+                                                        <input class="form-check-input" type="radio" name="family_reunion" id="family_hayir" value="hayir" t-att-checked="'checked' if form_data.get('family_reunion') == 'hayir' else None"/>
+                                                        <label class="form-check-label" for="family_hayir">Hayır</label>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div class="col-md-12 family-fields" style="display:none;">
+                                                <div class="row">
+                                                    <div class="col-md-6 mb-3">
+                                                        <label class="form-label">Eşinizi eklemek istiyor musunuz?</label>
+                                                        <div class="form-check">
+                                                            <input class="form-check-input" type="checkbox" name="has_spouse" id="has_spouse" t-att-checked="'checked' if form_data.get('has_spouse') else None"/>
+                                                            <label class="form-check-label" for="has_spouse">Eşimi eklemek istiyorum</label>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="col-md-6 mb-3">
+                                                        <label for="children_count" class="form-label">Çocuk Sayısı (0-2)</label>
+                                                        <input type="number" class="form-control" name="children_count" min="0" max="2" value="0" t-att-value="form_data.get('children_count', '0')"/>
+                                                    </div>
+                                                </div>
+
+                                                <!-- Spouse Fields -->
+                                                <div class="spouse-fields" style="display:none;">
+                                                    <h5 class="mt-3 mb-3">Eş Bilgileri</h5>
+                                                    <div class="row">
+                                                        <div class="col-md-6 mb-3">
+                                                            <label for="spouse_name" class="form-label">Eş Adı Soyadı <span class="text-danger">*</span></label>
+                                                            <input type="text" class="form-control" name="spouse_name" t-att-value="form_data.get('spouse_name', '')"/>
+                                                        </div>
+
+                                                        <div class="col-md-6 mb-3">
+                                                            <label for="spouse_birth_date" class="form-label">Eş Doğum Tarihi <span class="text-danger">*</span></label>
+                                                            <input type="date" class="form-control" name="spouse_birth_date" t-att-value="form_data.get('spouse_birth_date', '')"/>
+                                                        </div>
+
+                                                        <div class="col-md-6 mb-3">
+                                                            <label for="spouse_birth_place" class="form-label">Eş Doğum Yeri <span class="text-danger">*</span></label>
+                                                            <input type="text" class="form-control" name="spouse_birth_place" t-att-value="form_data.get('spouse_birth_place', '')"/>
+                                                        </div>
+
+                                                        <div class="col-md-6 mb-3">
+                                                            <label for="spouse_phone" class="form-label">Eş Telefon <span class="text-danger">*</span></label>
+                                                            <input type="tel" class="form-control" name="spouse_phone" t-att-value="form_data.get('spouse_phone', '')"/>
+                                                        </div>
+
+                                                        <div class="col-md-6 mb-3">
+                                                            <label for="spouse_email" class="form-label">Eş E-posta <span class="text-danger">*</span></label>
+                                                            <input type="email" class="form-control" name="spouse_email" t-att-value="form_data.get('spouse_email', '')"/>
+                                                        </div>
+
+                                                        <div class="col-md-6 mb-3">
+                                                            <label class="form-label">Eş Pasaport Var mı? <span class="text-danger">*</span></label>
+                                                            <select class="form-select" name="spouse_passport_has">
+                                                                <option value="">Seçiniz...</option>
+                                                                <option value="evet">Evet</option>
+                                                                <option value="hayir">Hayır</option>
+                                                            </select>
+                                                        </div>
+
+                                                        <div class="col-md-12 spouse-passport-fields" style="display:none;">
+                                                            <div class="row">
+                                                                <div class="col-md-4 mb-3">
+                                                                    <label for="spouse_passport_no" class="form-label">Eş Pasaport No <span class="text-danger">*</span></label>
+                                                                    <input type="text" class="form-control" name="spouse_passport_no" t-att-value="form_data.get('spouse_passport_no', '')"/>
+                                                                </div>
+
+                                                                <div class="col-md-4 mb-3">
+                                                                    <label for="spouse_passport_valid_until" class="form-label">Geçerlilik <span class="text-danger">*</span></label>
+                                                                    <input type="date" class="form-control" name="spouse_passport_valid_until" t-att-value="form_data.get('spouse_passport_valid_until', '')"/>
+                                                                </div>
+
+                                                                <div class="col-md-4 mb-3">
+                                                                    <label for="spouse_passport_photo" class="form-label">Pasaport Foto <span class="text-danger">*</span></label>
+                                                                    <input type="file" class="form-control" name="spouse_passport_photo" accept=".pdf,.jpg,.jpeg,.png"/>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="col-md-6 mb-3">
+                                                            <label class="form-label">Eş Almanca Sertifikası <span class="text-danger">*</span></label>
+                                                            <select class="form-select" name="spouse_german_certificate">
+                                                                <option value="">Seçiniz...</option>
+                                                                <option value="evet">Evet</option>
+                                                                <option value="hayir">Hayır</option>
+                                                            </select>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <!-- Children Fields (will be dynamically generated) -->
+                                                <div id="childrenContainer" class="mt-3"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- STEP 7: Language & Certificates -->
+                            <div class="form-step" data-step="7">
+                                <div class="card mb-4">
+                                    <div class="card-header bg-primary text-white">
+                                        <h3 class="mb-0">7. Dil ve Sertifikalar</h3>
+                                    </div>
+                                    <div class="card-body">
+                                        <div class="row">
+                                            <div class="col-md-6 mb-3">
+                                                <label for="german_level" class="form-label">Almanca Seviyeniz <span class="text-danger">*</span></label>
+                                                <select class="form-select" name="german_level">
+                                                    <option value="">Seçiniz...</option>
+                                                    <option value="a1">A1</option>
+                                                    <option value="a2">A2</option>
+                                                    <option value="b1">B1</option>
+                                                    <option value="b2">B2</option>
+                                                    <option value="c1">C1</option>
+                                                    <option value="c2">C2</option>
+                                                </select>
+                                            </div>
+
+                                            <div class="col-md-6 mb-3">
+                                                <label class="form-label">Dil Sertifikanız Var mı? <span class="text-danger">*</span></label>
+                                                <div>
+                                                    <div class="form-check form-check-inline">
+                                                        <input class="form-check-input" type="radio" name="has_language_certificate" id="cert_evet" value="evet"/>
+                                                        <label class="form-check-label" for="cert_evet">Evet</label>
+                                                    </div>
+                                                    <div class="form-check form-check-inline">
+                                                        <input class="form-check-input" type="radio" name="has_language_certificate" id="cert_hayir" value="hayir"/>
+                                                        <label class="form-check-label" for="cert_hayir">Hayır</label>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div class="col-md-12 certificate-fields" style="display:none;">
+                                                <div class="row">
+                                                    <div class="col-md-6 mb-3">
+                                                        <label for="language_certificate_type" class="form-label">Sertifika Türü <span class="text-danger">*</span></label>
+                                                        <select class="form-select" name="language_certificate_type">
+                                                            <option value="">Seçiniz...</option>
+                                                            <option value="goethe">Goethe</option>
+                                                            <option value="osd">ÖSD</option>
+                                                            <option value="telc">TELC</option>
+                                                            <option value="diger">Diğer</option>
+                                                        </select>
+                                                    </div>
+
+                                                    <div class="col-md-6 mb-3">
+                                                        <label for="language_certificate_doc" class="form-label">Sertifika Belgesi <span class="text-danger">*</span></label>
+                                                        <input type="file" class="form-control" name="language_certificate_doc" accept=".pdf,.jpg,.jpeg,.png"/>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <!-- Recognition Section -->
+                                            <div class="col-md-12 mt-3">
+                                                <h5 class="mb-3">Denklik (Recognition) Bilgileri</h5>
+                                            </div>
+
+                                            <div class="col-md-12 mb-3">
+                                                <label class="form-label">Denklik işlemi yaptınız mı? <span class="text-danger">*</span></label>
+                                                <div>
+                                                    <div class="form-check form-check-inline">
+                                                        <input class="form-check-input" type="radio" name="recognition_status" id="recog_hayir" value="hayir"/>
+                                                        <label class="form-check-label" for="recog_hayir">Hayır</label>
+                                                    </div>
+                                                    <div class="form-check form-check-inline">
+                                                        <input class="form-check-input" type="radio" name="recognition_status" id="recog_evet" value="evet"/>
+                                                        <label class="form-check-label" for="recog_evet">Evet</label>
+                                                    </div>
+                                                    <div class="form-check form-check-inline">
+                                                        <input class="form-check-input" type="radio" name="recognition_status" id="recog_devam" value="devam-ediyor"/>
+                                                        <label class="form-check-label" for="recog_devam">Devam Ediyor</label>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div class="col-md-12 recognition-fields" style="display:none;">
+                                                <div class="row">
+                                                    <div class="col-md-4 mb-3">
+                                                        <label for="recognition_state" class="form-label">Eyalet <span class="text-danger">*</span></label>
+                                                        <select class="form-select" name="recognition_state">
+                                                            <option value="">Seçiniz...</option>
+                                                            <option value="baden-wurttemberg">Baden-Württemberg</option>
+                                                            <option value="bayern">Bayern (Bavyera)</option>
+                                                            <option value="berlin">Berlin</option>
+                                                            <option value="brandenburg">Brandenburg</option>
+                                                            <option value="bremen">Bremen</option>
+                                                            <option value="hamburg">Hamburg</option>
+                                                            <option value="hessen">Hessen</option>
+                                                            <option value="mecklenburg-vorpommern">Mecklenburg-Vorpommern</option>
+                                                            <option value="niedersachsen">Niedersachsen</option>
+                                                            <option value="nordrhein-westfalen">Nordrhein-Westfalen</option>
+                                                            <option value="rheinland-pfalz">Rheinland-Pfalz</option>
+                                                            <option value="saarland">Saarland</option>
+                                                            <option value="sachsen">Sachsen</option>
+                                                            <option value="sachsen-anhalt">Sachsen-Anhalt</option>
+                                                            <option value="schleswig-holstein">Schleswig-Holstein</option>
+                                                            <option value="thuringen">Thüringen</option>
+                                                        </select>
+                                                    </div>
+
+                                                    <div class="col-md-4 mb-3">
+                                                        <label for="recognition_applied_at" class="form-label">Başvuru Tarihi <span class="text-danger">*</span></label>
+                                                        <input type="date" class="form-control" name="recognition_applied_at"/>
+                                                    </div>
+
+                                                    <div class="col-md-4 mb-3">
+                                                        <label for="recognition_received_at" class="form-label">Alış Tarihi <span class="text-danger">*</span></label>
+                                                        <input type="date" class="form-control" name="recognition_received_at"/>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- STEP 8: Job Preferences -->
+                            <div class="form-step" data-step="8">
+                                <div class="card mb-4">
+                                    <div class="card-header bg-primary text-white">
+                                        <h3 class="mb-0">8. İş Tercihleri</h3>
+                                    </div>
+                                    <div class="card-body">
+                                        <div class="row">
+                                            <div class="col-md-12 mb-3">
+                                                <label for="choice1" class="form-label">1. Tercih <span class="text-danger">*</span></label>
+                                                <select class="form-select" name="choice1">
+                                                    <option value="">Seçiniz...</option>
+                                                    <t t-foreach="preference_departments" t-as="dept">
+                                                        <option t-att-value="dept.id" t-esc="dept.name"/>
+                                                    </t>
+                                                </select>
+                                            </div>
+
+                                            <div class="col-md-12 mb-3">
+                                                <label for="choice2" class="form-label">2. Tercih <span class="text-danger">*</span></label>
+                                                <select class="form-select" name="choice2">
+                                                    <option value="">Seçiniz...</option>
+                                                    <t t-foreach="preference_departments" t-as="dept">
+                                                        <option t-att-value="dept.id" t-esc="dept.name"/>
+                                                    </t>
+                                                </select>
+                                            </div>
+
+                                            <div class="col-md-12 mb-3">
+                                                <label for="choice3" class="form-label">3. Tercih <span class="text-danger">*</span></label>
+                                                <select class="form-select" name="choice3">
+                                                    <option value="">Seçiniz...</option>
+                                                    <t t-foreach="preference_departments" t-as="dept">
+                                                        <option t-att-value="dept.id" t-esc="dept.name"/>
+                                                    </t>
+                                                </select>
+                                            </div>
+
+                                            <div class="col-md-12 mb-3">
+                                                <div class="form-check">
+                                                    <input class="form-check-input" type="checkbox" name="accept_other_department" id="accept_other_department"/>
+                                                    <label class="form-check-label" for="accept_other_department">
+                                                        Farklı bir birimde çalışmayı kabul ederim
+                                                    </label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- STEP 9: Experience & Education -->
+                            <div class="form-step" data-step="9">
+                                <div class="card mb-4">
+                                    <div class="card-header bg-primary text-white">
+                                        <h3 class="mb-0">9. Deneyim ve Eğitim</h3>
+                                    </div>
+                                    <div class="card-body">
+                                        <h5 class="mb-3">İş Deneyimi</h5>
+                                        <div id="experienceContainer">
+                                            <div class="experience-entry mb-3 p-3 border rounded">
+                                                <div class="row">
+                                                    <div class="col-md-6 mb-2">
+                                                        <label class="form-label">Kurum Adı</label>
+                                                        <input type="text" class="form-control" name="experience_company_1"/>
+                                                    </div>
+                                                    <div class="col-md-6 mb-2">
+                                                        <label class="form-label">Pozisyon</label>
+                                                        <input type="text" class="form-control" name="experience_position_1"/>
+                                                    </div>
+                                                    <div class="col-md-6 mb-2">
+                                                        <label class="form-label">Şehir</label>
+                                                        <input type="text" class="form-control" name="experience_city_1"/>
+                                                    </div>
+                                                    <div class="col-md-3 mb-2">
+                                                        <label class="form-label">Başlangıç</label>
+                                                        <input type="date" class="form-control" name="experience_date_start_1"/>
+                                                    </div>
+                                                    <div class="col-md-3 mb-2">
+                                                        <label class="form-label">Bitiş</label>
+                                                        <input type="date" class="form-control" name="experience_date_end_1"/>
+                                                    </div>
+                                                    <div class="col-md-12 mb-2">
+                                                        <label class="form-label">Bölümler</label>
+                                                        <select class="form-select" multiple="multiple" name="experience_departments_1" size="4">
+                                                            <t t-foreach="departments" t-as="dept">
+                                                                <option t-att-value="dept.id" t-esc="dept.name"/>
+                                                            </t>
+                                                        </select>
+                                                    </div>
+                                                    <div class="col-md-12 mb-2">
+                                                        <label class="form-label">Cihazlar</label>
+                                                        <select class="form-select" multiple="multiple" name="experience_devices_1" size="4">
+                                                            <t t-foreach="devices" t-as="device">
+                                                                <option t-att-value="device.id" t-esc="device.name"/>
+                                                            </t>
+                                                        </select>
+                                                    </div>
+                                                    <div class="col-md-12 mb-2">
+                                                        <label class="form-label">Yapılan İşler</label>
+                                                        <textarea class="form-control" name="experience_duties_1" rows="2"></textarea>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <button type="button" class="btn btn-sm btn-secondary mb-4" id="addExperienceBtn">+ Deneyim Ekle</button>
+
+                                        <hr class="my-4"/>
+
+                                        <h5 class="mb-3">Eğitim</h5>
+                                        <div id="educationContainer">
+                                            <div class="education-entry mb-3 p-3 border rounded">
+                                                <div class="row">
+                                                    <div class="col-md-6 mb-2">
+                                                        <label class="form-label">Okul Adı</label>
+                                                        <input type="text" class="form-control" name="education_school_1"/>
+                                                    </div>
+                                                    <div class="col-md-6 mb-2">
+                                                        <label class="form-label">Şehir</label>
+                                                        <input type="text" class="form-control" name="education_city_1"/>
+                                                    </div>
+                                                    <div class="col-md-6 mb-2">
+                                                        <label class="form-label">Başlangıç</label>
+                                                        <input type="date" class="form-control" name="education_date_start_1"/>
+                                                    </div>
+                                                    <div class="col-md-6 mb-2">
+                                                        <label class="form-label">Bitiş</label>
+                                                        <input type="date" class="form-control" name="education_date_end_1"/>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <button type="button" class="btn btn-sm btn-secondary" id="addEducationBtn">+ Eğitim Ekle</button>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- STEP 10: Motivation & Documents -->
+                            <div class="form-step" data-step="10">
+                                <div class="card mb-4">
+                                    <div class="card-header bg-primary text-white">
+                                        <h3 class="mb-0">10. Motivasyon ve Belgeler</h3>
+                                    </div>
+                                    <div class="card-body">
+                                        <div class="row">
+                                            <div class="col-md-12 mb-3">
+                                                <label for="motivation_text" class="form-label">Motivasyon Metni <span class="text-danger">*</span></label>
+                                                <textarea class="form-control" name="motivation_text" rows="5" placeholder="Neden bu pozisyonda çalışmak istiyorsunuz?"></textarea>
+                                            </div>
+
+                                            <div class="col-md-12 mb-3">
+                                                <label for="extra_info" class="form-label">Ek Bilgiler</label>
+                                                <textarea class="form-control" name="extra_info" rows="3" placeholder="Eklemek istediğiniz başka bilgiler..."></textarea>
+                                            </div>
+
+                                            <div class="col-md-12 mb-3">
+                                                <label for="formul_a_b_doc" class="form-label">Formül A/B Belgesi</label>
+                                                <input type="file" class="form-control" name="formul_a_b_doc" accept=".pdf"/>
+                                            </div>
+
+                                            <div class="col-md-12 mb-4">
+                                                <hr/>
+                                            </div>
+
+                                            <!-- Consent -->
+                                            <div class="col-md-12 mb-3">
+                                                <h5>Onay</h5>
+                                                <div class="form-check">
+                                                    <input class="form-check-input" type="checkbox" name="consent_ok" id="consent_ok" required="required"/>
+                                                    <label class="form-check-label" for="consent_ok">
+                                                        <strong>Kişisel verilerimin işlenmesine ve başvurumun değerlendirilmesine onay veriyorum. <span class="text-danger">*</span></strong>
+                                                    </label>
+                                                </div>
+                                            </div>
+
+                                            <div class="col-md-6 mb-3">
+                                                <label for="consent_name" class="form-label">Onay Adı Soyadı <span class="text-danger">*</span></label>
+                                                <input type="text" class="form-control" name="consent_name" id="consent_name"/>
+                                            </div>
+
+                                            <div class="col-md-6 mb-3">
+                                                <label for="consent_date" class="form-label">Onay Tarihi <span class="text-danger">*</span></label>
+                                                <input type="date" class="form-control" name="consent_date" id="consent_date"/>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Navigation Buttons -->
+                            <div class="form-navigation mt-4">
+                                <div class="row">
+                                    <div class="col-6">
+                                        <button type="button" class="btn btn-secondary btn-lg w-100" id="prevBtn" style="display:none;">
+                                            <i class="fa fa-arrow-left"></i> Önceki
+                                        </button>
+                                    </div>
+                                    <div class="col-6 text-end">
+                                        <button type="button" class="btn btn-primary btn-lg w-100" id="nextBtn">
+                                            Sonraki <i class="fa fa-arrow-right"></i>
+                                        </button>
+                                        <button type="submit" class="btn btn-success btn-lg w-100" id="submitBtn" style="display:none;">
+                                            <i class="fa fa-check"></i> Başvuruyu Gönder
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </section>
+            </div>
+        </t>
+    </template>
+
+    <!-- Thank You Page Template -->
+    <template id="career_application_thank_you_template" name="Application Thank You">
+        <t t-call="website.layout">
+            <div id="wrap" class="oe_structure">
+                <section class="pt96 pb96 text-center">
+                    <div class="container">
+                        <h1 class="text-success">
+                            <i class="fa fa-check-circle fa-3x mb-3"></i>
+                        </h1>
+                        <h1>Teşekkürler!</h1>
+                        <p class="lead">Başvurunuz başarıyla alındı.</p>
+                        <p>Başvurunuz incelendikten sonra sizinle iletişime geçeceğiz.</p>
+                        <a href="/" class="btn btn-primary mt-3">Ana Sayfaya Dön</a>
+                    </div>
+                </section>
+            </div>
+        </t>
+    </template>
+
+</odoo>
